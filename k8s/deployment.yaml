@@ -44,8 +44,8 @@ metadata:
   name: web
 spec:
   selector:
-  matchLabels:
-    app: web
+    matchLabels:
+      app: web
   template:
     metadata:
       labels:
@@ -53,7 +53,7 @@ spec:
     spec:  
       containers:
       - name: web
-        image: tallesalencar/rotten-potatoes:latest
+        image: tallesalencar/rotten-potatoes:v1
         ports:
         - containerPort: 5000
         env:
@@ -62,7 +62,7 @@ spec:
         - name: MONGODB_HOST
           value: mongodb
         - name: MONGODB_PORT
-          value: 27017
+          value: "27017"
         - name: MONGODB_USERNAME
           value: mongouser
         - name: MONGODB_PASSWORD
@@ -80,6 +80,8 @@ spec:
   ports:
   - port: 80
     targetPort: 5000
+    nodePort: 30000
+  type: NodePort
 
 
 
