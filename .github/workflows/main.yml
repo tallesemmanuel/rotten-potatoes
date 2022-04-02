@@ -4,17 +4,17 @@ on:
     branches: [ main ]
   workflow_dispatch:
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  CI:
+    runs-on: ubuntu-latest 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Docker Login
         uses: docker/login-action@v1.9.0
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PWD }}
-          
+          username: ${{secrets.DOCKERHUB_USER}}
+          password: ${{secrets.DOCKERHUB_PWD}}
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v2.4.0
         with:
@@ -23,5 +23,23 @@ jobs:
           push: true
           tags: |
             tallesalencar/rotten-potatoes:latest
-            tallesalencar/rotten-potatoes:${{ github.run_number }}
+            tallesalencar/rotten-potatoes:${{github.run_number}}
             
+  CD:
+    runs-on: ubuntu-latest
+    needs: [CI]
+    steps:
+      - uses: actions/checkout@v2
+  
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{secrets.K8S_CONFIG}}
+          
+      - name: Deploy Aplicação
+        uses: Azure/k8s-deploy@v1.3
+        with:
+          images: tallesalencar/rotten-potatoes:${{github.run_number}}
+          manifests: |
+            k8s/deployment.yaml
