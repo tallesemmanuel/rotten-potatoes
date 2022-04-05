@@ -37,7 +37,7 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{secrets.K8S_CONFIG}}
           
-      - name: Deploy Aplicação
+      - name: Deploy Aplicação Digital Ocean
         uses: Azure/k8s-deploy@v1.3
         with:
           images: tallesalencar/rotten-potatoes:${{github.run_number}}
