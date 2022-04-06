@@ -32,13 +32,13 @@ jobs:
       - uses: actions/checkout@v2
   
       - name: Kubernetes set context.
-        uses: DigitalOcean/k8s-set-context@v1
+        uses: digitalocean/action-doctl@v2.1.0
         with:
           method: kubeconfig
           kubeconfig: ${{secrets.K8S_CONFIG}}
           
       - name: Deploy Aplicação Digital Ocean
-        uses: DigitalOcean/k8s-deploy@v1.3
+        uses: digitalocean/action-doctl@v2.1.0
         with:
           images: tallesalencar/rotten-potatoes:${{github.run_number}}
           manifests: |
